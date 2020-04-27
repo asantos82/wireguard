@@ -79,3 +79,21 @@ Install [WireGuard](https://www.wireguard.com) if it's not installed.
 ## Contributors
 
 * [buraksarica](https://github.com/buraksarica)
+
+## Trick to make AllowedIPs work on OSX
+
+On OSX if you want to excluded private IP rages wireguard just stops working.
+
+- Tick the box "Exclude Private IPs"
+- Grab the public of your instance running WireGuard i.e. 34.250.109.34
+- On the Excluded IP Ranges find the range where your IPs belongs i.e. 32.0.0.0/3
+- Open python and write the following for the examples above
+```python
+n1 = ipaddress.ip_network(u'32.0.0.0/3')
+n2 = ipaddress.ip_network(u'34.250.109.34/32')
+list(n1.address_exclude(n2))
+[IPv4Network(u'48.0.0.0/4'), IPv4Network(u'40.0.0.0/5'), IPv4Network(u'36.0.0.0/6'), IPv4Network(u'32.0.0.0/7'), IPv4Network(u'35.0.0.0/8'), IPv4Network(u'34.0.0.0/9'), IPv4Network(u'34.128.0.0/10'), IPv4Network(u'34.192.0.0/11'), IPv4Network(u'34.224.0.0/12'), IPv4Network(u'34.240.0.0/13'), IPv4Network(u'34.252.0.0/14'), IPv4Network(u'34.248.0.0/15'), IPv4Network(u'34.251.0.0/16'), IPv4Network(u'34.250.128.0/17'), IPv4Network(u'34.250.0.0/18'), IPv4Network(u'34.250.64.0/19'), IPv4Network(u'34.250.112.0/20'), IPv4Network(u'34.250.96.0/21'), IPv4Network(u'34.250.104.0/22'), IPv4Network(u'34.250.110.0/23'), IPv4Network(u'34.250.108.0/24'), IPv4Network(u'34.250.109.128/25'), IPv4Network(u'34.250.109.64/26'), IPv4Network(u'34.250.109.0/27'), IPv4Network(u'34.250.109.48/28'), IPv4Network(u'34.250.109.40/29'), IPv4Network(u'34.250.109.36/30'), IPv4Network(u'34.250.109.32/31'), IPv4Network(u'34.250.109.35/32')]
+```
+
+- Go back to the Excluped IPs Ranges previosuly generated and replace i.e 32.0.0.0/3 with all the IPs Ranges from above, i.e. 48.0.0.0/4, 40.0.0.0/5, 36.0.0.0/6 ... and so on
+

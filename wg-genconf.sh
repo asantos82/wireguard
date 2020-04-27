@@ -26,7 +26,7 @@ echo -e "\t$(pwd)/${server_config}"
 #
 cat > "${server_config}" <<EOL
 [Interface]
-Address = 10.0.0.1/24
+Address = 192.168.69.1/24
 SaveConfig = true
 ListenPort = 51820
 PrivateKey = ${server_private_key}
@@ -44,7 +44,7 @@ for i in $(seq 1 "${clients_count}");
 do
     client_private_key=$(wg genkey)
     client_public_key=$(echo "${client_private_key}" | wg pubkey)
-    client_ip=10.0.0.$((i+1))/32
+    client_ip=192.168.69.$((i+1))/32
     client_config=client$i.conf
     echo -e "\t$(pwd)/${client_config}"
   	cat > "${client_config}" <<EOL
@@ -52,7 +52,7 @@ do
 PrivateKey = ${client_private_key}
 ListenPort = 51820
 Address = ${client_ip}
-DNS = 10.0.0.1
+DNS = 192.168.69.1
 
 [Peer]
 PublicKey = ${server_public_key}

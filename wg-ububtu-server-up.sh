@@ -23,10 +23,10 @@ sudo modprobe wireguard
 echo ----------------------------------------------------------install qrencode
 sudo apt install -y qrencode
 
-echo -------------------------------------------------- download wg-genconfig.sh
-cd "${working_dir}" &&
-wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh
-chmod +x ./wg-genconf.sh
+#echo -------------------------------------------------- download wg-genconfig.sh
+#cd "${working_dir}" &&
+#wget https://raw.githubusercontent.com/drew2a/wireguard/master/wg-genconf.sh
+#chmod +x ./wg-genconf.sh
 
 echo ----------------------generate configurations for "${clients_count}" clients
 ./wg-genconf.sh "${clients_count}"
@@ -50,8 +50,8 @@ echo ---------------------------------------------------configure firewall rules
 sudo iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A INPUT -p udp -m udp --dport 55000 -m conntrack --ctstate NEW -j ACCEPT
-sudo iptables -A INPUT -s 10.0.0.0/24 -p tcp -m tcp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
-sudo iptables -A INPUT -s 10.0.0.0/24 -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
+sudo iptables -A INPUT -s 192.168.69.0/24 -p tcp -m tcp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
+sudo iptables -A INPUT -s 192.168.69.0/24 -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT
 
 # make firewall changes persistent
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
@@ -85,9 +85,9 @@ server:
     # IPs authorised to access the DNS Server
     access-control: 0.0.0.0/0                 refuse
     access-control: 127.0.0.1                 allow
-    access-control: 10.0.0.0/24             allow
+    access-control: 192.168.69.0/24             allow
     # not allowed to be returned for public Internet  names
-    private-address: 10.0.0.0/24
+    private-address: 192.168.69.0/24
     #hide DNS Server info
     hide-identity: yes
     hide-version: yes
@@ -114,7 +114,7 @@ server:
     # ensure kernel buffer is large enough to not lose messages in traffic spikes
     so-rcvbuf: 1m
     # ensure privacy of local IP ranges
-    private-address: 10.0.0.0/24
+    private-address: 192.168.69.0/24
 ENDOFFILE
 
 # give root ownership of the Unbound config
